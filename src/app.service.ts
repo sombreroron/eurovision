@@ -1,6 +1,4 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
-import webPush from 'web-push';
-import keys from '../keys.json';
 
 @Injectable()
 export class AppService implements OnModuleInit {
