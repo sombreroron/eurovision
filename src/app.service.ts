@@ -28,7 +28,7 @@ export class AppService implements OnModuleInit {
           elements.map((element) => element.evaluate((el) => el.textContent)),
         );
 
-        if (dates.includes('10')) {
+        if (dates.includes('14')) {
           await page.evaluate(() => {
             clearInterval(openInterval);
             clearInterval(closeInterval);
