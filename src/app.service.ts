@@ -1,26 +1,27 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
+import webPush from 'web-push';
+import keys from '../keys.json';
 
 @Injectable()
 export class AppService implements OnModuleInit {
-  onModuleInit(): any {
-    const openInterval = setInterval(async () => {
-      // eslint-disable-next-line @typescript-eslint/no-var-requires
-      const puppeteer = require('puppeteer');
+  openInterval;
 
-      const browser = await puppeteer.launch({ headless: false });
+  async onModuleInit() {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const puppeteer = require('puppeteer');
+
+    const browser = await puppeteer.launch({ headless: false });
+    const page = await browser.newPage();
+
+    this.openInterval = setInterval(async () => {
 
       try {
-        const page = await browser.newPage();
-
-        const closeInterval = setInterval(() => {
-          browser.close();
-        }, 60000);
-
         await page.goto(
           'https://www.fansale.it/fansale/tickets/pop-amp-rock/eurovision-song-contest/459768?language=en',
         );
 
         await page.waitForSelector('.EvEntryRow-Day');
+
 
         const elements = await page.$$('.EvEntryRow-Day.hidden-md');
 
@@ -29,15 +30,11 @@ export class AppService implements OnModuleInit {
         );
 
         if (dates.includes('14')) {
-          await page.evaluate(() => {
-            clearInterval(openInterval);
-            clearInterval(closeInterval);
-            alert('NOW!!!');
-          });
+          await clearInterval(this.openInterval);
+          await page.goto('https://www.youtube.com/watch?v=dQw4w9WgXcQ')
         }
       } catch (e) {
-        await browser.close();
       }
-    }, 60000);
+    }, 6000);
   }
 }
